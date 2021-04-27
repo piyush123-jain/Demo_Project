@@ -1,28 +1,20 @@
 
 
-module.exports.message = (err)=>{
-    console.log(err.code);
-    let errors  ={email:''
-    // ,password:''
-};
-
-    if(err.code == 11000)
-    {
-        errors.message = "email is already exists";
-        error.value=false;
-        return errors }
-    
-    if(err.message.includes('user validation failed')){
-        Object.values(err.errors).forEach(({properties})=>{
-            errors[properties.path]=properties.message;
-        });
-    }    
-
-    return errors;
-}
-
-
 module.exports.SuccessMessage = (message)=>{
-    console.log(message);
-        return {message:'user created',value:true};
+            return {message:'user created',value:true};
+   }
+module.exports.userAuthanticate = ()=>{
+            return {message:'you are authorized person',value:true};
+   }
+module.exports.checkPassword = ()=>{
+            return {message:'check your password again',value:false};
+   }
+module.exports.verify = ()=>{
+            return {message:'Please verify your account first ',value:false};
+   }
+module.exports.checkEmail = ()=>{
+            return {message:'Check Email id Again',value:false};
+   }
+module.exports.serverSideError = ()=>{
+            return {message:'server side error please try again later',value:false};
    }

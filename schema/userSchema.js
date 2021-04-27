@@ -2,12 +2,6 @@ const mongoose = require('mongoose');
 const { isEmail } = require('validator');
 
 const users = new mongoose.Schema({
-    address:{
-        type:String
-    },
-    birth_date:{
-        type:String
-    },
     
     email:{
         type:String,
@@ -16,42 +10,31 @@ const users = new mongoose.Schema({
         lowercase:true,
         validate:[isEmail,'please enter a valid email'],
     },
-    
-    gender:{
-        type:String
+    isConfirmed:{
+        type:Boolean,
+        default:false
     },
-    married:{
-        type:String
-    },
-    name:{
-        type:String
-    },
-    occupation:{
-        type:String
-    },
-    org:{
-        type:String
-    },
-    password:{
-        type:String
-    },
-    pincode:{
-        type:String
-    },
-    position:{
-        type:String
-    },
-    some:{
-        type:String
-    },
-    title:{
-        type:String
-    },
-    otp:{
-        type:Number
-    }
+    address:schemaFunction('String'),
+    birth_date:schemaFunction('String'),
+        gender:schemaFunction('String'),
+    married:schemaFunction('String'),
+    name:schemaFunction('String'),
+    phone:schemaFunction('Number'),
+    occupation:schemaFunction('String'),
+    org:schemaFunction('String'),
+    password:schemaFunction('String'),
+    pincode:schemaFunction('String'),
+    position:schemaFunction('String'),
+    some:schemaFunction('String'),
+    title:schemaFunction('String'),
+    otp:schemaFunction('Number'),
     })
-
+    function schemaFunction(types){
+    
+        return {
+            type:types
+        }
+    }
 
 // create static login function 
 
@@ -63,6 +46,15 @@ users.static('login', async function(email) {
     else { return null}
 
 })
+// users.static('phone_number_check', async function(phone) {
+//     const phone = await this.findOne({phone});
+//     if(phone){
+//         return phone;
+//     }
+//     else { return null}
+
+// })
+
 const user  = mongoose.model('user',users);
 
 module.exports = user;
