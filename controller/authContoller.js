@@ -2,7 +2,7 @@ const user  = require('../schema/userSchema');
 // const message = require('../middelware/message');
 const send = require('../middelware/verifyEmail');
 var jwt = require('jsonwebtoken');
-
+const emailTemplate  = require('../middelware/emailTemplate');
 
 const maxAge = 3* 24*24;
 
@@ -19,18 +19,18 @@ module.exports.signUp_post =  async (req,res)=>{
         // genrate password/otp 
         var password = Math.floor(Math.random()*10000);
 
-        var html = `<p>your password ${password}</p>
-                    <p>Please enter you password inside of  click here url </p>
-                    <a href="http://localhost:4200/verifyEmail">Click here </a>`
+        var html = await emailTemplate.emailTemplate(password);
+
         // send email of  new user 
         send.mailSend(
             'piyushj1937@gmail.com', 
             req.body.email,
             "password",
             html
+            
         ).then(function(data){
             // Save user.
-            var users = new user(req.body);       
+            var users = new user({email:req.body.email});       
             users.otp = password;
             users.save(function (err, userCreated) {                                        // save momessagedel to database
             
@@ -51,7 +51,7 @@ module.exports.checkEmail = async (req,res)=>{
     const { email } = req.body;
     console.log(email);
     try {
-        userExists =  await user.login(email);
+        userExists =  await user.login(req.body);
         if(userExists){   return res.json({exists:' Exists! try another one'})}
 
         res.json({success:'new user'});
